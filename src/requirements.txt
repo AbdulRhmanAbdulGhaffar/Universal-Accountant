@@ -1,0 +1,13 @@
+Django>=5.0
+psycopg[binary]
+djangorestframework
+djangorestframework-simplejwt
+python-dotenv
+celery
+redis
+Pillow
+django-filter
+reportlab
+xhtml2pdf
+openpyxl
+whitenoise

@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="row g-4">
+  <div class="col-md-3">
+    <div class="card shadow-sm">
+      <div class="card-body">
+        <h6 class="text-muted">إجمالي المبيعات (اليوم)</h6>
+        <h3 id="kpi-sales">—</h3>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="card shadow-sm"><div class="card-body">
+      <h6 class="text-muted">إجمالي المشتريات (اليوم)</h6>
+      <h3 id="kpi-purchases">—</h3>
+    </div></div>
+  </div>
+  <div class="col-md-3">
+    <div class="card shadow-sm"><div class="card-body">
+      <h6 class="text-muted">الأرباح (الشهر)</h6>
+      <h3 id="kpi-profit">—</h3>
+    </div></div>
+  </div>
+  <div class="col-md-3">
+    <div class="card shadow-sm"><div class="card-body">
+      <h6 class="text-muted">منتجات منخفضة</h6>
+      <h3 id="kpi-lowstock">—</h3>
+    </div></div>
+  </div>
+</div>
+<div class="row mt-4">
+  <div class="col-12">
+    <canvas id="salesChart"></canvas>
+  </div>
+</div>
+<script>
+fetch('/api/dashboard/kpis')
+  .then(r=>r.json()).then(d=>{
+    document.getElementById('kpi-sales').innerText = d.today_sales_total;
+    document.getElementById('kpi-purchases').innerText = d.today_purchases_total;
+    document.getElementById('kpi-profit').innerText = d.month_profit;
+    document.getElementById('kpi-lowstock').innerText = d.low_stock_count;
+});
+
+fetch('/api/dashboard/sales-series')
+  .then(r=>r.json()).then(d=>{
+    new Chart(document.getElementById('salesChart'), {
+      type: 'line',
+      data: { labels: d.labels, datasets: [{ label: 'مبيعات', data: d.values }] },
+    });
+});
+</script>
+{% endblock %}

@@ -1,0 +1,40 @@
+{% load static %}
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<style>
+  body { font-family: DejaVu Sans, Arial, sans-serif; font-size: 12px; }
+  .header { text-align:center; margin-bottom: 10px; }
+  .table { width: 100%; border-collapse: collapse; }
+  .table th, .table td { border: 1px solid #333; padding: 6px; }
+  .right { text-align: right; }
+</style>
+<title>فاتورة بيع</title>
+</head>
+<body>
+<div class="header">
+  <h2>فاتورة بيع</h2>
+  <p>العميل: {{ invoice.customer.name }} | التاريخ: {{ invoice.date }}</p>
+</div>
+<table class="table">
+  <thead>
+    <tr><th>#</th><th>الصنف</th><th>المخزن</th><th>الكمية</th><th>سعر الوحدة</th><th>الإجمالي</th><th>التكلفة (COGS)</th></tr>
+  </thead>
+  <tbody>
+  {% for l in lines %}
+    <tr>
+      <td>{{ forloop.counter }}</td>
+      <td>{{ l.product.name }}</td>
+      <td>{{ l.warehouse.name }}</td>
+      <td class="right">{{ l.qty }}</td>
+      <td class="right">{{ l.unit_price }}</td>
+      <td class="right">{{ l.qty|floatformat:2|add:0|floatformat:2 }}</td>
+      <td class="right">{{ l.cogs }}</td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+<p class="right">الإجمالي: {{ invoice.total }}</p>
+</body>
+</html>
